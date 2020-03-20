@@ -17,15 +17,15 @@ namespace Infrastructure.Data
         {
             _dbContext = dbContext;
         }
-        public virtual async Task<T> GetByIdAsync(int id)
+        public  async Task<T> GetByIdAsync(int id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
-        public async Task<IReadOnlyList<T>> ListAllAsync()
+        public async Task<List<T>> ListAllAsync()
         {
             return await _dbContext.Set<T>().ToListAsync();
         }
-        public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+        public async Task<List<T>> ListAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }

@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ApplicationCore.Entities.Models
 {
-   public class Species
+   public class Species : BaseEntity
     {
-        public int Id { get; set; }
+        
         public string Name { get; set; }
         public List<Product> Products { get; set; }
     }

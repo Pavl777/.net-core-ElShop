@@ -4,9 +4,8 @@ using System.Text;
 
 namespace ApplicationCore.Entities.Models
 {
-   public class Manufacturer
+   public class Manufacturer : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
 
