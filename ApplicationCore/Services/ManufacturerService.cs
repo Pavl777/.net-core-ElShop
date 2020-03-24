@@ -10,9 +10,9 @@ namespace ApplicationCore.Services
    public class ManufacturerService
     {
         private readonly IAsyncRepository<Manufacturer> _manufacturerRepository;
-        public ManufacturerService(IAsyncRepository<Manufacturer> manufacturerService)
+        public ManufacturerService(IAsyncRepository<Manufacturer> manufacturerRepository)
         {
-            _manufacturerRepository = manufacturerService;
+            _manufacturerRepository = manufacturerRepository;
         }
         public async Task CreateManufacturerAsync(string name, string country)
         {
@@ -33,7 +33,7 @@ namespace ApplicationCore.Services
             return await _manufacturerRepository.ListAllAsync();
             
         }
-
+       
         public async Task<Manufacturer> UpdateManufacturer(int id, string name, string country)
         {
             var manufacturer = await _manufacturerRepository.GetByIdAsync(id);
