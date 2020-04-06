@@ -5,9 +5,13 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{241D1512-3E89-425B-B5A6-B67DF3A12C5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{41824E51-0122-4397-9ADA-9EE25E55E60D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{41824E51-0122-4397-9ADA-9EE25E55E60D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationCore", "ApplicationCore\ApplicationCore.csproj", "{AE52404D-28E6-455A-90F6-A49342410704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "ApplicationCore\ApplicationCore.csproj", "{AE52404D-28E6-455A-90F6-A49342410704}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WEB", "WEB", "{E8A1E535-AC57-4733-AF76-BF7D452D13B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAdminEShop", "WebAdminEShop\WebAdminEShop.csproj", "{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,10 @@ Global
 		{AE52404D-28E6-455A-90F6-A49342410704}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE52404D-28E6-455A-90F6-A49342410704}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE52404D-28E6-455A-90F6-A49342410704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{41824E51-0122-4397-9ADA-9EE25E55E60D} = {241D1512-3E89-425B-B5A6-B67DF3A12C5B}
 		{AE52404D-28E6-455A-90F6-A49342410704} = {241D1512-3E89-425B-B5A6-B67DF3A12C5B}
+		{E8A1E535-AC57-4733-AF76-BF7D452D13B4} = {241D1512-3E89-425B-B5A6-B67DF3A12C5B}
+		{9E77E1EE-E6A6-4E7F-B333-67937677DF8F} = {E8A1E535-AC57-4733-AF76-BF7D452D13B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9AC8C32E-EC75-4C49-BCBA-7ECD9953820A}
