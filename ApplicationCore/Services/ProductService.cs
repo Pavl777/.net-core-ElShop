@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
-  public  class ProductService
+  public  class ProductService :IProductService
     {
         private readonly IAsyncRepository<Product> _productRepository;
 
@@ -15,21 +15,9 @@ namespace ApplicationCore.Services
         {
             _productRepository = productRepository;
         }
-        public async Task CreatePoductAsync(string name, int price, string description, int speciesId,
-                                            int manufacturerId, int fridgeId, int phoneId, int microwaveId)
+        public async Task CreatePoductAsync(Product product)
         {
-            var product = new Product()
-            {
-                Name = name,
-                Price = price,
-                Description = description,
-                SpeciesId = speciesId,
-                ManufacturerId = manufacturerId,
-                FridgeId = fridgeId,
-                PhoneId = phoneId,
-                MicrowaveId = microwaveId
-            };
-
+            
             await _productRepository.AddAsync(product);
         }
 

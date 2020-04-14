@@ -1,8 +1,16 @@
-﻿@{
+﻿@model IEnumerable<ProductDTO>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+@*<div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+</div>*@
+
+    <div class="row">
+        <div class="col-md-4">
+            @Html.ActionLink("Add Product", "AddProduct", "Product")
+        </div>
+        
+    </div>

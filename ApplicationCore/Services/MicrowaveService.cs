@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
-   public class MicrowaveService
+   public class MicrowaveService : IMicrrowaveService
     {
         private readonly IAsyncRepository<Microwave> _microwaveRepository;
 

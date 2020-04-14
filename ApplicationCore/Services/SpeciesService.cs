@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
-   public class SpeciesService
+   public class SpeciesService : ISpeciesService
     {
         private readonly IAsyncRepository<Species> _speciesRepository;
         public SpeciesService(IAsyncRepository<Species> speciesRepository)

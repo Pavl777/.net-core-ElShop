@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
-   public class FridgeService
+   public class FridgeService : IFridgeService
     {
         private readonly IAsyncRepository<Fridge> _fridgeRepository;
         public FridgeService(IAsyncRepository<Fridge> fridgeRepository)

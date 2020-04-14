@@ -12,6 +12,9 @@ using WebAdminEShop.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ApplicationCore.Services;
+using ApplicationCore.Interfaces;
+using Infrastructure.Data;
 
 namespace WebAdminEShop
 {
@@ -27,14 +30,30 @@ namespace WebAdminEShop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //           .AddDefaultUI()
+            //           .AddEntityFrameworkStores<AppIdentityDbContext>()
+            //                           .AddDefaultTokenProviders();
+
+
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+
+            services.AddDbContext<EShopContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddTransient(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+
+            services.AddServices();
         }
+       
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,6 +84,19 @@ namespace WebAdminEShop
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+        }
+    }
+    public static class ServiceProviderExtensions
+    {
+        public static void AddServices(this IServiceCollection services)
+        {
+            services.AddTransient<IManufacturerService,ManufacturerService>();
+            services.AddTransient<IMicrrowaveService, MicrowaveService>();
+            services.AddTransient<IPhoneService,PhoneService>();
+            services.AddTransient<IProductService,ProductService>();
+            services.AddTransient<ISpeciesService,SpeciesService>();
+            services.AddTransient<IFridgeService, FridgeService>();
+
         }
     }
 }

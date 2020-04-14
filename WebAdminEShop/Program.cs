@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -23,10 +24,11 @@ namespace WebAdminEShop
                 var services = scope.ServiceProvider;
                 try
                 {
+                    
                     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await AdminInitialaizer.InitializeAsync(userManager, rolesManager);
-
+                    
                 }
                 catch (Exception ex)
                 {

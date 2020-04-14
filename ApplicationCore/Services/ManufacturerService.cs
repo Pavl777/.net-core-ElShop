@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
-   public class ManufacturerService
+   public class ManufacturerService : IManufacturerService
     {
         private readonly IAsyncRepository<Manufacturer> _manufacturerRepository;
         public ManufacturerService(IAsyncRepository<Manufacturer> manufacturerRepository)

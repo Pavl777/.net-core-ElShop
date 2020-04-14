@@ -1,0 +1,18 @@
+﻿@model ProductDTO
+@{
+    ViewData["Title"] = "AddProduct";
+}
+<form method="post" action="~/Product/AddProduct">
+    <p>
+        <label> Name:</label><br />
+        @Html.TextBox("name")
+    </p>
+    
+    <p>
+        <label> Price:</label>
+        @Html.TextBox("price")
+    </p>
+    <input type="submit" value="Отправить" />
+</form>
+<h1>AddProduct</h1>
+

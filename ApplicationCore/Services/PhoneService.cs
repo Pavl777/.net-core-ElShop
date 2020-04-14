@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Services
 {
-   public class PhoneService
+   public class PhoneService : IPhoneService
     {
         private readonly IAsyncRepository<Phone> _phoneRepository;
 
-        PhoneService(IAsyncRepository<Phone> phoneRepository)
+        public PhoneService(IAsyncRepository<Phone> phoneRepository)
         {
             _phoneRepository = phoneRepository;
         }

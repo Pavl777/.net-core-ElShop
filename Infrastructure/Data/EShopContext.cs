@@ -9,7 +9,7 @@ namespace Infrastructure.Data
 {
    public class EShopContext : DbContext
     {
-        public EShopContext() { 
+        public EShopContext(DbContextOptions<EShopContext> options) : base(options) { 
         }
 
         public DbSet<Product> Products { get; set; }
