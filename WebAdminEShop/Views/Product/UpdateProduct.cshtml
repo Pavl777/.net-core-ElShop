@@ -1,0 +1,38 @@
+﻿@model ProductDTO
+@{
+    ViewData["Title"] = "UpdateProduct";
+}
+<div class="container">
+    <div class="row">
+        <div col-md-4>
+            @using (Html.BeginForm("UpdateProduct", "Product", FormMethod.Post))
+            {
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Name)
+                    @Html.TextBoxFor(x => x.Name, "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Price)
+                    @Html.TextBoxFor(x => x.Price, "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Description)
+                    @Html.TextBoxFor(x => x.Description, "", new { @class = "form-control" })
+
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.SpeciesId, Model.SpeciesSource, "select Species")
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(x => x.ManufacturerId, Model.ManufacturerSource, "select Manufacturer")
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update product</button>
+            }
+        </div>
+
+    </div>
+</div>
+
+<h1>UpdateProduct</h1>
+

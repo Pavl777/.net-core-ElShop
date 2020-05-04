@@ -19,6 +19,7 @@ namespace ApplicationCore.Services
         {
             
             await _productRepository.AddAsync(product);
+            
         }
 
         public async Task DeleteProduct(int id)
@@ -32,18 +33,15 @@ namespace ApplicationCore.Services
             return await _productRepository.ListAllAsync();
 
         }
-        public async Task<Product> UpdateProduct(int id, string name, int price, string description, int speciesId,
-                                            int manufacturerId, int fridgeId, int phoneId, int microwaveId)
+        public async Task<Product> UpdateProduct(Product prod)
         {
-            var product = await _productRepository.GetByIdAsync(id);
-            product.Name = name;
-            product.Price = price;
-            product.Description = description;
-            product.SpeciesId = speciesId;
-            product.ManufacturerId = manufacturerId;
-            product.FridgeId = fridgeId;
-            product.PhoneId = phoneId;
-            product.MicrowaveId = microwaveId;
+            var product = await _productRepository.GetByIdAsync(prod.Id);
+            product.Name = prod.Name;
+            product.Price = prod.Price;
+            product.Description = prod.Description;
+            product.SpeciesId = prod.SpeciesId;
+            product.ManufacturerId = prod.ManufacturerId;
+           
             return await _productRepository.UpdateAsync(product);
         }
         public async Task<Product> GetByIdAsync(int id)

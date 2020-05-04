@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using ApplicationCore.Services;
 using ApplicationCore.Interfaces;
 using Infrastructure.Data;
+using FluentValidation.AspNetCore;
 
 namespace WebAdminEShop
 {
@@ -50,6 +51,8 @@ namespace WebAdminEShop
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddMvc().AddFluentValidation();
+            
 
             services.AddServices();
         }
@@ -81,7 +84,7 @@ namespace WebAdminEShop
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Product}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
