@@ -5,32 +5,51 @@
 <div class="container">
     <div class="row">
         <div col-md-4>
-            @using (Html.BeginForm("UpdateProduct", "Product", FormMethod.Post))
+
+
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+            @using (Html.BeginForm("UpdateProduct", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <div class="form-group">
+                    <input type="file" name="uploadFile" /><br>
+                </div>
+                <div class="form-group">
                     @Html.LabelFor(x => x.Name)
-                    @Html.TextBoxFor(x => x.Name, "", new { @class = "form-control" })
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" }, "")
+                    <span asp-validation-for="Name"></span>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.Price)
                     @Html.TextBoxFor(x => x.Price, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.Price, "", new { @class = "text-danger" }, "")
+                    <span asp-validation-for="Price"></span>
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.Description)
                     @Html.TextBoxFor(x => x.Description, "", new { @class = "form-control" })
-
+                    @Html.ValidationMessageFor(x => x.Description, "", new { @class = "text-danger" }, "")
+                    <span asp-validation-for="Description"></span>
                 </div>
                 <div class="form-group">
                     @Html.DropDownListFor(x => x.SpeciesId, Model.SpeciesSource, "select Species")
+                    @Html.ValidationMessageFor(x => x.SpeciesId, "", new { @class = "text-danger" }, "")
+                    <span asp-validation-for="SpeciesId"></span>
                 </div>
                 <div class="form-group">
                     @Html.DropDownListFor(x => x.ManufacturerId, Model.ManufacturerSource, "select Manufacturer")
+                    @Html.ValidationMessageFor(x => x.ManufacturerId, "", new { @class = "text-danger" }, "")
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update product</button>
-            }
-        </div>
 
+            }
+
+
+        </div>
+        
     </div>
 </div>
 

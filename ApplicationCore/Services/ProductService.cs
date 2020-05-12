@@ -36,6 +36,7 @@ namespace ApplicationCore.Services
         public async Task<Product> UpdateProduct(Product prod)
         {
             var product = await _productRepository.GetByIdAsync(prod.Id);
+            product.Image = prod.Image;
             product.Name = prod.Name;
             product.Price = prod.Price;
             product.Description = prod.Description;

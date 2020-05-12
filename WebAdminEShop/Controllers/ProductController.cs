@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities.Models;
 using ApplicationCore.Interfaces;
 using AutoMapper;
+using Google;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebAdminEShop.Models;
@@ -17,11 +21,16 @@ namespace WebAdminEShop.Controllers
         IProductService iProdSrvice;
         IManufacturerService iManuFService;
         ISpeciesService iSpecies;
-        public ProductController(IProductService iproductservice, IManufacturerService imanufacturerService,ISpeciesService ispec)
+
+        IWebHostEnvironment iAppEnvironment;
+        
+        
+        public ProductController(IProductService iproductservice, IManufacturerService imanufacturerService,ISpeciesService ispec, IWebHostEnvironment iwebhost)
         {
             iProdSrvice = iproductservice;
             iManuFService = imanufacturerService;
             iSpecies = ispec;
+            iAppEnvironment = iwebhost;
         }
        
         
@@ -48,8 +57,18 @@ namespace WebAdminEShop.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> AddProduct(ProductDTO prod)
+        public async Task<IActionResult> AddProduct(ProductDTO prod,IFormFile uploadFile)
         {
+            if (uploadFile != null)
+            {
+                string path = "/Images/" + uploadFile.FileName;
+
+                using (var fileStream = new FileStream(iAppEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadFile.CopyToAsync(fileStream);
+                }
+                prod.Image = path;
+            }
             if (ModelState.IsValid)
             {
                  var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
@@ -87,20 +106,37 @@ namespace WebAdminEShop.Controllers
         }
       
         [HttpPost]
-        public async Task<IActionResult> UpdateProduct(ProductDTO prod)
+        public async Task<IActionResult> UpdateProduct(ProductDTO prod, IFormFile uploadFile)
         {
-            if (ModelState.IsValid)
+            if(uploadFile != null)
             {
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
-                var mapper = new Mapper(config);
-                
-                Product product = mapper.Map<ProductDTO, Product>(prod);
-                await iProdSrvice.UpdateProduct(product);
+                string path = "/Images/" + uploadFile.FileName;
 
-                return RedirectToAction("Index");
+                using (var fileStream = new FileStream(iAppEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadFile.CopyToAsync(fileStream);
+                }
+                prod.Image = path; 
             }
-            else
+
+            if (!ModelState.IsValid)
+            {
+                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
+                                       Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
+                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                
                 return View(prod);
+                
+            }
+            
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
+            var mapper = new Mapper(config);
+
+            Product product = mapper.Map<ProductDTO, Product>(prod);
+            await iProdSrvice.UpdateProduct(product);
+            return RedirectToAction("Index");
         }
+        
     }
 }

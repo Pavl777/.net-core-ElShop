@@ -16,6 +16,8 @@ using ApplicationCore.Services;
 using ApplicationCore.Interfaces;
 using Infrastructure.Data;
 using FluentValidation.AspNetCore;
+using FluentValidation;
+using WebAdminEShop.Models;
 
 namespace WebAdminEShop
 {
@@ -52,8 +54,8 @@ namespace WebAdminEShop
 
             services.AddTransient(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddMvc().AddFluentValidation();
-            
 
+            services.AddTransient<IValidator<ProductDTO>, ProductDTOValidation>();
             services.AddServices();
         }
        

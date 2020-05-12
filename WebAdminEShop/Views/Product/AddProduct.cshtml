@@ -6,9 +6,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post))
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+            @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post, new { enctype="multipart/form-data"}))
             {
+               
+                
 
+                @*<h3>Выберите файл для загрузки</h3>
+                <form asp-action="AddProduct" asp-controller="Product" method="post" enctype="multipart/form-data">
+                    <input type="file" name="uploadedFile" /><br>
+                    <input type="submit" value="Загрузить" />
+                </form>*@
+                <div class="form-group">
+                    <input type="file" name="uploadFile"/><br>
+                </div>
                 <div class="form-group">
                     @Html.LabelFor(x => x.Name)
                     @Html.TextBoxFor(x => x.Name, "", new { @class = "form-control" })<span asp-validation-for="Name"></span>
@@ -28,11 +41,11 @@
 
                 </div>
                 <div class="form-group">
-                    @Html.DropDownListFor(x => x.SpeciesId, Model.SpeciesSource, "select Species")
+                    @Html.DropDownListFor(x => x.SpeciesId, Model.SpeciesSource, "select Species", new { @class = "form-control" })<span asp-validation-for="SpeciesId"></span>
                 </div>
 
                 <div class="form-group">
-                    @Html.DropDownListFor(x => x.ManufacturerId, Model.ManufacturerSource, "select Manufacturer")
+                    @Html.DropDownListFor(x => x.ManufacturerId, Model.ManufacturerSource, "select Manufacturer", new { @class = "form-control" })<span asp-validation-for="ManufacturerId"></span>
                 </div>
                 <button type="submit" class="btn btn-primary">Send</button>
 
