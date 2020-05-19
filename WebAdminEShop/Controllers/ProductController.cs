@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebAdminEShop.Models;
 
+
 namespace WebAdminEShop.Controllers
 {
     public class ProductController : Controller
@@ -21,10 +23,10 @@ namespace WebAdminEShop.Controllers
         IProductService iProdSrvice;
         IManufacturerService iManuFService;
         ISpeciesService iSpecies;
-
         IWebHostEnvironment iAppEnvironment;
+        private string[] permittedExtensions = { ".jpg" };
         
-        
+
         public ProductController(IProductService iproductservice, IManufacturerService imanufacturerService,ISpeciesService ispec, IWebHostEnvironment iwebhost)
         {
             iProdSrvice = iproductservice;
@@ -45,7 +47,7 @@ namespace WebAdminEShop.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> AddProduct()
-        {
+        { 
             ProductDTO prodDTO = new ProductDTO
             {
                 ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
@@ -59,27 +61,52 @@ namespace WebAdminEShop.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct(ProductDTO prod,IFormFile uploadFile)
         {
-            if (uploadFile != null)
+            
+            if (!ModelState.IsValid)
             {
-                string path = "/Images/" + uploadFile.FileName;
-
-                using (var fileStream = new FileStream(iAppEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadFile.CopyToAsync(fileStream);
-                }
-                prod.Image = path;
-            }
-            if (ModelState.IsValid)
-            {
-                 var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
-                var mapper = new Mapper(config);
-                Product product = mapper.Map<ProductDTO, Product>(prod);
-                await iProdSrvice.CreatePoductAsync(product);
-
-                return RedirectToAction("Index");
-            }
-            else
+               
+                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
+                                     Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
+                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
                 return View(prod);
+            }
+            var ext = Path.GetExtension(uploadFile.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
+                                    Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
+                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                return View(prod);
+            }
+            using (var image = Image.FromStream(uploadFile.OpenReadStream()))
+            {
+                if(image.Height > 500 || image.Width > 500)
+                {
+                    prod.Error = "Image is bigger than 500";
+                    return View(prod);
+                }
+            }
+
+            if (uploadFile != null )
+                {
+                    string path = "/Images/" + uploadFile.FileName;
+
+                    using (var fileStream = new FileStream(iAppEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await uploadFile.CopyToAsync(fileStream);
+                    }
+                
+                prod.Image = path;
+                }
+            
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
+            var mapper = new Mapper(config);
+            Product product = mapper.Map<ProductDTO, Product>(prod);
+            await iProdSrvice.CreatePoductAsync(product);
+            return RedirectToAction("Index");
         }
        public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -108,7 +135,18 @@ namespace WebAdminEShop.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProduct(ProductDTO prod, IFormFile uploadFile)
         {
-            if(uploadFile != null)
+             
+            if (!ModelState.IsValid)
+            {
+                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
+                                       Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
+                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+
+                return View(prod);
+
+            }
+            if (uploadFile != null)
             {
                 string path = "/Images/" + uploadFile.FileName;
 
@@ -119,16 +157,7 @@ namespace WebAdminEShop.Controllers
                 prod.Image = path; 
             }
 
-            if (!ModelState.IsValid)
-            {
-                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
-                                       Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
-                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                
-                return View(prod);
-                
-            }
+            
             
             var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
             var mapper = new Mapper(config);

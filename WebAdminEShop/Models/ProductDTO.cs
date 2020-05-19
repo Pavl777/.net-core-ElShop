@@ -21,6 +21,8 @@ namespace WebAdminEShop.Models
         public int SpeciesId { get; set; }
        
         public int ManufacturerId { get; set; }
+
+        public string Error { get; set; }
         
         public string Description { get; set; }
         public List<SelectListItem> ManufacturerSource { get; set; }
@@ -32,6 +34,7 @@ namespace WebAdminEShop.Models
     {
         public ProductDTOValidation()
         {
+            
             RuleFor(x => x.Name).Length(0,25).NotEmpty();
             RuleFor(x => x.Price).InclusiveBetween(1, 60000);
             RuleFor(x => x.SpeciesId).NotNull();
