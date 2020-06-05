@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "Applicat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WEB", "WEB", "{E8A1E535-AC57-4733-AF76-BF7D452D13B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAdminEShop", "WebAdminEShop\WebAdminEShop.csproj", "{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAdminEShop", "WebAdminEShop\WebAdminEShop.csproj", "{9E77E1EE-E6A6-4E7F-B333-67937677DF8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,9 +14,9 @@ namespace ApplicationCore.Services
         {
             _speciesRepository = speciesRepository;
         }
-        public async Task CreateSpeciesAsync(string name, List<Product> products)
+        public async Task CreateSpeciesAsync(string name)
         {
-            var species = new Species() { Name = name, Products = products };
+            var species = new Species() { Name = name };
 
             await _speciesRepository.AddAsync(species);
         }
@@ -34,11 +34,11 @@ namespace ApplicationCore.Services
 
         }
 
-        public async Task<Species> UpdateSpecies(int id, string name, List<Product> products)
+        public async Task<Species> UpdateSpecies(int id, string name)
         {
             var species = await _speciesRepository.GetByIdAsync(id);
             species.Name = name;
-            species.Products = products;
+            
             return await _speciesRepository.UpdateAsync(species);
         }
 

@@ -8,10 +8,10 @@ namespace ApplicationCore.Interfaces
 {
    public interface ISpeciesService
     {
-        Task CreateSpeciesAsync(string name, List<Product> products);
+        Task CreateSpeciesAsync(string name);
         Task DeleteSpeciesAsync(int id);
         Task<List<Species>> ReadAllSpecies();
-        Task<Species> UpdateSpecies(int id, string name, List<Product> products);
+        Task<Species> UpdateSpecies(int id, string name);
         Task<Species> GetByIdAsync(int id);
     }
 }

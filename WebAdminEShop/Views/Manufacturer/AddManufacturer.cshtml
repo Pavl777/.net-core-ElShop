@@ -1,0 +1,29 @@
+﻿@model ManufacturerDTO
+@{
+    ViewData["Title"] = "AddManufacturer";
+}
+
+<h1>AddManufacturer</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                @section Scripts {
+                    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                }
+                @using (Html.BeginForm("AddManufacturer", "Manufacturer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+
+                    <div>
+                        @Html.LabelFor(x => x.Name)
+                        @Html.TextBoxFor(x => x.Name, "", new { @class = "form-control" })<span asp-validation-for="Name"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                }
+            </div>
+
+
+        </div>
+    </div>
+</div>

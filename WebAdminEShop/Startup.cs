@@ -18,6 +18,7 @@ using Infrastructure.Data;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using WebAdminEShop.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebAdminEShop
 {
@@ -37,6 +38,9 @@ namespace WebAdminEShop
             //           .AddDefaultUI()
             //           .AddEntityFrameworkStores<AppIdentityDbContext>()
             //                           .AddDefaultTokenProviders();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie();
+            
 
 
             services.AddControllersWithViews();
@@ -45,8 +49,15 @@ namespace WebAdminEShop
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = false;
+            })
+       .AddEntityFrameworkStores<ApplicationDbContext>()
+       .AddDefaultTokenProviders();
 
             services.AddDbContext<EShopContext>(options =>
                 options.UseSqlServer(

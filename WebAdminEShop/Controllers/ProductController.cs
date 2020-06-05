@@ -9,6 +9,7 @@ using ApplicationCore.Interfaces;
 using AutoMapper;
 using Google;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ using WebAdminEShop.Models;
 
 namespace WebAdminEShop.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         IProductService iProdSrvice;
@@ -45,6 +47,7 @@ namespace WebAdminEShop.Controllers
             var products =  mapper.Map<List<ProductDTO>>(await iProdSrvice.ReadAllProduct());
             return View( products);
         }
+        
         [HttpGet]
         public async Task<IActionResult> AddProduct()
         { 
@@ -57,35 +60,31 @@ namespace WebAdminEShop.Controllers
             };
             return View(prodDTO);
         }
-        
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddProduct(ProductDTO prod,IFormFile uploadFile)
         {
             
             if (!ModelState.IsValid)
             {
-               
-                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
-                                     Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
-                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+
+                await InitialDropDownList(prod);
                 return View(prod);
             }
             var ext = Path.GetExtension(uploadFile.FileName).ToLowerInvariant();
 
             if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
             {
-                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
-                                    Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
-                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                await InitialDropDownList(prod);
+                prod.Error = "Need .jpg extension";
                 return View(prod);
             }
             using (var image = Image.FromStream(uploadFile.OpenReadStream()))
             {
-                if(image.Height > 500 || image.Width > 500)
+                if(image.Height < 500 || image.Height != image.Width )
                 {
-                    prod.Error = "Image is bigger than 500";
+                    await InitialDropDownList(prod);
+                    prod.Error = "Image is less than 500";
                     return View(prod);
                 }
             }
@@ -108,7 +107,8 @@ namespace WebAdminEShop.Controllers
             await iProdSrvice.CreatePoductAsync(product);
             return RedirectToAction("Index");
         }
-       public async Task<IActionResult> DeleteProduct(int id)
+        [Authorize]
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             var prod = await iProdSrvice.GetByIdAsync(id);
             if(prod.Id != 0)
@@ -123,25 +123,18 @@ namespace WebAdminEShop.Controllers
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>());
             var mapper = new Mapper(config);
             ProductDTO prDTO =  mapper.Map<Product, ProductDTO>(prod);
-      
-                prDTO.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
-                                       Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-            prDTO.SpeciesSource = (await iSpecies.ReadAllSpecies()).
-                                    Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                return View(prDTO);
+            await InitialDropDownList(prDTO);
+            return View(prDTO);
             
         }
-      
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateProduct(ProductDTO prod, IFormFile uploadFile)
         {
              
             if (!ModelState.IsValid)
             {
-                prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
-                                       Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
-                                        Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                await InitialDropDownList(prod);
 
                 return View(prod);
 
@@ -157,8 +150,23 @@ namespace WebAdminEShop.Controllers
                 prod.Image = path; 
             }
 
-            
-            
+            var ext = Path.GetExtension(uploadFile.FileName).ToLowerInvariant();
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                await InitialDropDownList(prod);
+                prod.Error = "Need .jpg extension";
+                return View(prod);
+            }
+            using (var image = Image.FromStream(uploadFile.OpenReadStream()))
+            {
+                if (image.Height < 500 || image.Height != image.Width)
+                {
+                    await InitialDropDownList(prod);
+                    prod.Error = "Image is less than 500"; 
+                    return View(prod);
+                }
+            }
+
             var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, Product>());
             var mapper = new Mapper(config);
 
@@ -166,6 +174,14 @@ namespace WebAdminEShop.Controllers
             await iProdSrvice.UpdateProduct(product);
             return RedirectToAction("Index");
         }
-        
+        public async Task<ProductDTO> InitialDropDownList(ProductDTO prod)
+        {
+            prod.ManufacturerSource = (await iManuFService.ReadAllManufacturer()).
+                                   Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+            prod.SpeciesSource = (await iSpecies.ReadAllSpecies()).
+                                    Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+            return prod;
+        }
     }
+    
 }

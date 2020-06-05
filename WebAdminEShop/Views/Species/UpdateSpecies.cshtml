@@ -1,0 +1,41 @@
+﻿@model SpeciesDTO
+@{
+    ViewData["Title"] = "Update";
+}
+    <div class="container">
+        <div class="row">
+            <div col-md-4>
+
+
+                @section Scripts {
+                    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                }
+                @using (Html.BeginForm("UpdateSpecies", "Species", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="alert alert-primary" role="alert">
+                        @Model.Error
+                    </div>
+                    <div>
+                        @Html.HiddenFor(x => x.Id);
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Name)
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" }, "")
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                    
+                
+
+                    <button type="submit" class="btn btn-primary">Update species</button>
+
+                }
+
+
+            </div>
+
+        </div>
+        </div>
+
+        <h1>Update</h1>
+

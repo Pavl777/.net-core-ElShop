@@ -29,7 +29,7 @@
                 <tr>
                     <td>
                         @*@Html.DisplayFor(modelItem => item.Image)*@
-                        <img  src ="@item.Image" height="70" width="100"/>
+                        <img src="@item.Image" height="70" width="100" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
@@ -53,13 +53,19 @@
 
         </table>
     </div>
-    
+
 </div>
 
 
 <div class="row">
     <div class="col-md-4">
         @Html.ActionLink("Add Product", "AddProduct", "Product")
+    </div>
+    <div class="col-md-4">
+        @Html.ActionLink("Add Species", "AddSpecies", "Species")
+    </div>
+    <div class="col-md-4">
+        @Html.ActionLink("Add Manufacturer", "AddManufacturer", "Manufacturer")
     </div>
 
 </div>

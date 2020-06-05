@@ -15,7 +15,7 @@ namespace Infrastructure.Data.Config
 
             builder.Property(p => p.Id).IsRequired().UseIdentityColumn();
             builder.Property(p => p.Name).IsRequired().HasMaxLength(50);
-            builder.Property(p => p.Country).IsRequired().HasMaxLength(50);
+            
         }
     }
 }
